@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap');
+
+/*
+  Estilos globais são regras compartilhadas por todas as páginas.
+  :root representa o documento inteiro e é um bom lugar para definir a fonte,
+  a cor do texto e a cor de fundo padrão da aplicação.
+*/
+:root { font-family: 'DM Sans', sans-serif; color: #17333d; background: #f5f8f8; font-synthesis: none; }
+/* border-box faz padding e borda entrarem no cálculo da largura dos elementos. */
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+button { font: inherit; }
+/* Estrutura principal: menu em uma coluna fixa e conteúdo no espaço restante. */
+.app-shell { min-height: 100vh; display: grid; grid-template-columns: 246px 1fr; }
+.sidebar { background: #103b43; color: #d5eaeb; padding: 28px 18px 20px; display: flex; flex-direction: column; }
+/* Identidade e navegação lateral. */
+.brand { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; font-family: Manrope, sans-serif; font-weight: 800; font-size: 19px; padding: 0 8px; }
+.brand-mark { display: grid; place-items: center; height: 38px; width: 38px; border-radius: 12px; background: #17a1a0; }
+.sidebar nav { margin-top: 52px; }
+.nav-title { margin: 0 8px 11px; text-transform: uppercase; letter-spacing: .09em; font-size: 10px; font-weight: 700; color: #7dabb0; }
+.nav-link { display: flex; align-items: center; gap: 11px; padding: 11px 12px; margin: 3px 0; border-radius: 9px; color: #bed8da; text-decoration: none; font-size: 14px; font-weight: 600; }
+.nav-link.active, .nav-link:hover { background: #1a5159; color: #fff; }
+.sidebar-footer { margin-top: auto; padding: 13px 10px 0; border-top: 1px solid #28545b; display: flex; align-items: center; gap: 9px; color: #9fc3c5; font-size: 12px; }
+/* Limites e cabeçalho comuns às páginas. */
+.content { padding: 44px 52px; overflow: hidden; }
+.page { max-width: 1320px; margin: 0 auto; }
+.narrow-page { max-width: 760px; }
+.page-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; margin-bottom: 32px; }
+.eyebrow { color: #0f8e8c; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin: 0 0 7px; }
+h1, h2 { font-family: Manrope, sans-serif; color: #14363d; margin: 0; }
+h1 { font-size: clamp(25px, 3vw, 34px); letter-spacing: -.045em; }
+h2 { font-size: 16px; letter-spacing: -.02em; }
+.subtitle { margin: 9px 0 0; color: #668086; font-size: 15px; }
+/* Cartões de métricas e painéis reutilizados no dashboard. */
+.live-badge { flex: none; display: flex; align-items: center; gap: 7px; padding: 8px 11px; color: #187454; background: #e3f6ed; border-radius: 999px; font-size: 12px; font-weight: 700; }
+.live-badge i { height: 7px; width: 7px; border-radius: 50%; background: #21b878; }
+.metrics-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 25px; }
+.metric-card, .panel { background: #fff; border: 1px solid #e5eeee; box-shadow: 0 3px 10px rgba(16, 59, 67, .025); border-radius: 14px; }
+.metric-card { padding: 19px; }
+.metric-icon { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 11px; margin-bottom: 16px; }
+.metric-icon.blue { color: #177bca; background: #e4f3ff; }.metric-icon.green { color: #168768; background: #e3f7ee; }.metric-icon.amber { color: #b46d13; background: #fff1d9; }
+.metric-card p { margin: 0 0 5px; color: #70888d; font-size: 13px; }.metric-card strong { display: block; font-family: Manrope, sans-serif; font-size: 22px; color: #153b42; }.metric-card small { display: block; margin-top: 7px; color: #719196; font-size: 11px; }
+.dashboard-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(320px, 1fr); gap: 20px; }.panel { padding: 23px; }.panel-heading { display: flex; justify-content: space-between; align-items: flex-start; }.panel-heading p { margin: 5px 0 0; color: #7c9498; font-size: 12px; }.text-button { border: 0; background: transparent; color: #078d8a; font-weight: 700; font-size: 12px; cursor: pointer; }
+.chart-panel { min-height: 300px; }.chart-placeholder { position: relative; height: 205px; margin-top: 23px; padding-top: 178px; display: flex; justify-content: space-between; color: #91a6a9; font-size: 10px; border-bottom: 1px solid #e6eeee; background: repeating-linear-gradient(to bottom, transparent 0, transparent 45px, #edf2f2 46px, transparent 47px); }.chart-line { position: absolute; left: 0; right: 0; top: 35px; height: 120px; background: linear-gradient(180deg, rgba(25, 161, 160, .18), rgba(25, 161, 160, 0)); clip-path: polygon(0 68%, 14% 50%, 27% 59%, 41% 33%, 55% 43%, 70% 12%, 84% 28%, 100% 0, 100% 100%, 0 100%); border-top: 3px solid #1a9e9b; }
+.reading-list { margin-top: 14px; }.reading { display: flex; align-items: center; gap: 10px; padding: 14px 0; border-top: 1px solid #edf2f2; }.reading-icon { width: 32px; height: 32px; display: grid; place-items: center; color: #168dbc; background: #e6f5fb; border-radius: 9px; }.reading div:nth-child(2) { flex: 1; }.reading strong, .reading small { display: block; }.reading strong { color: #244850; font-size: 13px; }.reading small { color: #7c969a; font-size: 11px; margin-top: 3px; }.reading b { color: #14745d; font-size: 13px; }.settings-card { margin-top: 14px; }.settings-card p { color: #607b81; line-height: 1.65; }.settings-card code { padding: 2px 5px; border-radius: 4px; background: #eef4f4; color: #135b63; }
+/*
+  Media queries adaptam o layout a telas menores. A primeira remove a coluna
+  lateral; a segunda empilha o conteúdo para caber em celulares estreitos.
+*/
+@media (max-width: 950px) { .app-shell { grid-template-columns: 1fr; }.sidebar { padding: 14px 18px; flex-direction: row; align-items: center; gap: 22px; }.sidebar nav { margin: 0; display: flex; gap: 4px; }.nav-title, .sidebar-footer { display: none; }.content { padding: 32px 24px; }.metrics-grid { grid-template-columns: repeat(2, 1fr); }.dashboard-grid { grid-template-columns: 1fr; } }
+@media (max-width: 560px) { .sidebar { align-items: flex-start; flex-direction: column; gap: 10px; }.sidebar nav { width: 100%; }.nav-link { display: inline-flex; }.content { padding: 25px 16px; }.page-header { flex-direction: column; gap: 14px; margin-bottom: 23px; }.metrics-grid { grid-template-columns: 1fr; }.panel { padding: 18px; } }
