@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
-import { Bell, Check, ChevronDown, Clock3, Map, MapPin, Radio, Settings2, ShieldCheck, UserRound, Waves, WifiOff, CircleAlert, TriangleAlert, LocateFixed, Eye, LockKeyhole, SlidersHorizontal } from 'lucide-react'
+import { Bell, Check, ChevronDown, Clock3, Map, MapPin, Radio, Settings2, ShieldCheck, UserRound, Waves, WifiOff, CircleAlert, TriangleAlert, LocateFixed, Eye, LockKeyhole, SlidersHorizontal, type LucideIcon } from 'lucide-react'
 import { monitoringPoints } from '@/features/dashboard/data/monitoringPoints'
 import '@/styles/settings.css'
 
 type Section = 'notifications' | 'points' | 'map' | 'privacy' | 'account' | 'sensors' | 'rules'
 type AlertType = 'critical' | 'attention' | 'normalized' | 'offline'
 type Interest = 'all' | 'followed' | 'nearby'
-type SettingsMenuItem = { id: Section; label: string; icon: typeof Bell }
+type SettingsMenuItem = { id: Section; label: string; icon: LucideIcon }
 type SettingsMenuGroup = { group: string; items: readonly SettingsMenuItem[] }
 type SettingsState = {
   alerts: Record<AlertType, boolean>
