@@ -6,6 +6,8 @@ import '@/styles/settings.css'
 type Section = 'notifications' | 'points' | 'map' | 'privacy' | 'account' | 'sensors' | 'rules'
 type AlertType = 'critical' | 'attention' | 'normalized' | 'offline'
 type Interest = 'all' | 'followed' | 'nearby'
+type SettingsMenuItem = { id: Section; label: string; icon: typeof Bell }
+type SettingsMenuGroup = { group: string; items: readonly SettingsMenuItem[] }
 type SettingsState = {
   alerts: Record<AlertType, boolean>
   interest: Interest
@@ -31,7 +33,7 @@ const initialSettings: SettingsState = {
   mapLabels: true, mapCoverage: true, shareLocation: false, publicProfile: false,
   criticalLevel: 100, attentionLevel: 60,
 }
-const menu = [
+const menu: readonly SettingsMenuGroup[] = [
   { group: 'Geral', items: [
     { id: 'notifications', label: 'Notificações', icon: Bell },
     { id: 'points', label: 'Pontos acompanhados', icon: MapPin },
@@ -43,7 +45,7 @@ const menu = [
     { id: 'sensors', label: 'Sensores e pontos', icon: Radio },
     { id: 'rules', label: 'Regras de alerta', icon: Settings2 },
   ] },
-] as const
+]
 const alertOptions = [
   { id: 'critical', title: 'Nível crítico', description: 'Quando o nível da água atinge o limite crítico.', icon: CircleAlert },
   { id: 'attention', title: 'Nível de atenção', description: 'Quando o nível da água atinge o limite de atenção.', icon: TriangleAlert },
