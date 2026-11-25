@@ -158,3 +158,23 @@ test('gateway delay is explicit, bounded, and never overrides disconnect or repl
   assert.equal(telemetryFresh(service.getSnapshot(), Date.now()), false)
   service.stop()
 })
+
+test('base de tópicos: padrão preservado e base de teste opcional validada', async () => {
+  const { resolveTopicBase, DEFAULT_TOPIC_BASE } = await import('../src/features/esp32/protocol.ts')
+  assert.equal(config.telemetry, `${DEFAULT_TOPIC_BASE}/telemetria`)
+  assert.equal(config.commands, `${DEFAULT_TOPIC_BASE}/comandos`)
+  assert.equal(config.status, `${DEFAULT_TOPIC_BASE}/status`)
+  assert.equal(resolveTopicBase(undefined), DEFAULT_TOPIC_BASE)
+  assert.equal(resolveTopicBase(''), DEFAULT_TOPIC_BASE)
+  assert.equal(resolveTopicBase(' aquamonitor/demo-29out-b741d2/wokwi '), 'aquamonitor/demo-29out-b741d2/wokwi')
+  for (const unsafe of ['aquamonitor/#', 'a/+/b', '/a', 'a/', 'a//b', 'a b']) assert.equal(resolveTopicBase(unsafe), DEFAULT_TOPIC_BASE)
+})
+
+test('broker: original por padrão; broker de testes só com wss:// e sem credenciais na URL', async () => {
+  const { resolveBrokerUrl, DEFAULT_BROKER_URL } = await import('../src/features/esp32/protocol.ts')
+  assert.equal(config.url, DEFAULT_BROKER_URL)
+  assert.equal(resolveBrokerUrl(undefined), DEFAULT_BROKER_URL)
+  assert.equal(resolveBrokerUrl(''), DEFAULT_BROKER_URL)
+  assert.equal(resolveBrokerUrl(' wss://abc123.ala.us-east-1.emqxsl.com:8084/mqtt '), 'wss://abc123.ala.us-east-1.emqxsl.com:8084/mqtt')
+  for (const unsafe of ['ws://abc.emqxsl.com:8083/mqtt', 'mqtts://abc.emqxsl.com:8883', 'wss://user:pass@abc.emqxsl.com:8084/mqtt', 'wss://abc.emqxsl.com:8084/mqtt?password=x', 'nao-e-url']) assert.equal(resolveBrokerUrl(unsafe), DEFAULT_BROKER_URL)
+})

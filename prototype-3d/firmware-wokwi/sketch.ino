@@ -36,8 +36,16 @@ constexpr uint32_t MQTT_RETRY_MS = 5000;
 constexpr uint32_t WIFI_RETRY_MS = 15000;
 constexpr uint32_t WIFI_LOG_INTERVAL_MS = 5000;
 
-const char* MQTT_HOST = "d684655e.ala.us-east-1.emqxsl.com";
-constexpr uint16_t MQTT_PORT = 8883;
+// Broker padrao = EMQX Cloud original. Para um broker de testes, defina
+// MQTT_BROKER_HOST (e, se preciso, MQTT_BROKER_PORT) no config.h local.
+#ifndef MQTT_BROKER_HOST
+#define MQTT_BROKER_HOST "d684655e.ala.us-east-1.emqxsl.com"
+#endif
+#ifndef MQTT_BROKER_PORT
+#define MQTT_BROKER_PORT 8883
+#endif
+const char* MQTT_HOST = MQTT_BROKER_HOST;
+constexpr uint16_t MQTT_PORT = MQTT_BROKER_PORT;
 // Vazios por seguranca: use credenciais de cliente MQTT do EMQX, nao o login do painel.
 
 
@@ -65,9 +73,14 @@ pLiaWN0bfVKfjllDiIGknibVb63dDcY3fe0Dkhvld1927jyNxF1WW6LZZm6zNTfl
 MrY=
 -----END CERTIFICATE-----
 )PEM";
-const char* TOPIC_COMMAND = "aquamonitor/demo-29out-b741d2/comandos";
-const char* TOPIC_TELEMETRY = "aquamonitor/demo-29out-b741d2/telemetria";
-const char* TOPIC_STATUS = "aquamonitor/demo-29out-b741d2/status";
+// Base dos topicos. Padrao = topicos originais. Para testes isolados do prototipo
+// fisico, defina MQTT_TOPIC_BASE no config.h (ex.: ".../wokwi") e use a mesma base no dashboard.
+#ifndef MQTT_TOPIC_BASE
+#define MQTT_TOPIC_BASE "aquamonitor/demo-29out-b741d2"
+#endif
+const char* TOPIC_COMMAND = MQTT_TOPIC_BASE "/comandos";
+const char* TOPIC_TELEMETRY = MQTT_TOPIC_BASE "/telemetria";
+const char* TOPIC_STATUS = MQTT_TOPIC_BASE "/status";
 WiFiClientSecure wifiClient;
 PubSubClient mqtt(wifiClient);
 struct Inputs {

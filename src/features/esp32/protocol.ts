@@ -1,8 +1,27 @@
+export const DEFAULT_TOPIC_BASE = 'aquamonitor/demo-29out-b741d2'
+/** Optional test namespace (e.g. Wokwi apart from the physical board). Never a secret. */
+export function resolveTopicBase(raw: unknown): string {
+  const value = typeof raw === 'string' ? raw.trim() : ''
+  return /^[A-Za-z0-9_-]+(\/[A-Za-z0-9_-]+)*$/.test(value) && value.length <= 120 ? value : DEFAULT_TOPIC_BASE
+}
+export const DEFAULT_BROKER_URL = 'wss://d684655e.ala.us-east-1.emqxsl.com:8084/mqtt'
+/** Optional test broker (e.g. your own EMQX Cloud Serverless). Only secure WebSocket URLs; never credentials. */
+export function resolveBrokerUrl(raw: unknown): string {
+  const value = typeof raw === 'string' ? raw.trim() : ''
+  try {
+    const url = new URL(value)
+    if (url.protocol === 'wss:' && url.hostname && !url.username && !url.password && !url.search && !url.hash && value.length <= 200) return value
+  } catch { /* invalid or empty: keep the original broker */ }
+  return DEFAULT_BROKER_URL
+}
+const env = (import.meta as { env?: Record<string, unknown> }).env
+const topicBase = resolveTopicBase(env?.VITE_MQTT_TOPIC_BASE)
 export const MQTT_CONFIG = {
-  url: 'wss://d684655e.ala.us-east-1.emqxsl.com:8084/mqtt',
-  telemetry: 'aquamonitor/demo-29out-b741d2/telemetria',
-  commands: 'aquamonitor/demo-29out-b741d2/comandos',
-  status: 'aquamonitor/demo-29out-b741d2/status',
+  url: resolveBrokerUrl(env?.VITE_MQTT_URL),
+  topicBase,
+  telemetry: `${topicBase}/telemetria`,
+  commands: `${topicBase}/comandos`,
+  status: `${topicBase}/status`,
   lateMs: 6000,
   staleMs: 15000,
   commandIntervalMs: 2000,

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { aquaMqtt, telemetryDelayed } from './mqttService'
-import { MQTT_CONFIG } from './protocol'
+import { DEFAULT_BROKER_URL, DEFAULT_TOPIC_BASE, MQTT_CONFIG } from './protocol'
 import { useSimulation } from '../simulation/hooks/SimulationContext'
 const connectionLabels = { offline: 'desconectado', connecting: 'conectando', connected: 'conectado', reconnecting: 'reconectando', error: 'falha' }
 const deviceLabels = { online: 'online', offline: 'offline', unknown: 'desconhecido' }
@@ -37,6 +37,7 @@ export function Esp32Panel() {
         <button type="button" onClick={() => aquaMqtt.stop()}>Desconectar</button>
       </form>
       <p className="sim-help">Credenciais apenas na memória durante a conexão; campos limpos ao conectar. Produção requer bridge/backend autenticado.</p>
+      <p className="sim-help">Broker: <code>{new URL(MQTT_CONFIG.url).host}</code>{MQTT_CONFIG.url !== DEFAULT_BROKER_URL && ' (broker de testes)'} • Tópicos MQTT: <code>{MQTT_CONFIG.topicBase}/…</code>{MQTT_CONFIG.topicBase !== DEFAULT_TOPIC_BASE && ' (base de teste, separada do protótipo físico)'}</p>
       <p role="status">Broker: {connectionLabels[mqtt.connection]} • ESP32: {deviceLabels[mqtt.deviceStatus]} • Telemetria: {fresh ? delayed ? `recebimento com atraso (${age} s)` : 'recente' : mqtt.telemetry ? `dados desatualizados (limite ${MQTT_CONFIG.staleMs / 1000} s)` : 'aguardando'}</p>
       <p role="status"><strong>{fresh ? delayed ? 'ESP32 online · aguardando próxima leitura' : 'ESP32 transmitindo' : mqtt.connection === 'connected' ? 'ESP32 desconectado ou telemetria desatualizada' : `MQTT: ${connectionLabels[mqtt.connection]}`}</strong> • Protótipo conectado por Wi-Fi • 30 cm</p>
       <label>Entrada do ESP32 <select aria-label="Entrada do ESP32" value={virtualInput ? 'virtual' : 'sensor'} onChange={e => setVirtualInput(e.target.value === 'virtual')}><option value="sensor">HC-SR04 e chaves do protótipo</option><option value="virtual">Entradas virtuais de demonstração</option></select></label>

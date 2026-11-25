@@ -1,0 +1,445 @@
+{
+  "version": 1,
+  "author": "AquaMonitor",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-esp32-devkit-v1",
+      "id": "esp",
+      "top": 140,
+      "left": 300,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-breadboard-half",
+      "id": "bb1",
+      "top": 380,
+      "left": 180,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-hc-sr04",
+      "id": "ultrasonic",
+      "top": 0,
+      "left": 0,
+      "attrs": {
+        "distance": "25"
+      }
+    },
+    {
+      "type": "wokwi-relay-module",
+      "id": "relayDrain",
+      "top": -60,
+      "left": 520,
+      "attrs": {
+        "transistor": "pnp"
+      }
+    },
+    {
+      "type": "wokwi-relay-module",
+      "id": "relayReuse",
+      "top": 20,
+      "left": 520,
+      "attrs": {
+        "transistor": "pnp"
+      }
+    },
+    {
+      "type": "wokwi-slide-switch",
+      "id": "swTankFull",
+      "top": 200,
+      "left": 560,
+      "attrs": {
+        "bounce": "0"
+      }
+    },
+    {
+      "type": "wokwi-slide-switch",
+      "id": "swTankWater",
+      "top": 260,
+      "left": 560,
+      "attrs": {
+        "bounce": "0"
+      }
+    },
+    {
+      "type": "wokwi-slide-switch",
+      "id": "swReuse",
+      "top": 320,
+      "left": 560,
+      "attrs": {
+        "bounce": "0"
+      }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "lblTankFull",
+      "top": 196,
+      "left": 620,
+      "attrs": {
+        "text": "Boia CHEIO (GPIO32)"
+      }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "lblTankWater",
+      "top": 256,
+      "left": 620,
+      "attrs": {
+        "text": "Boia AGUA DISPONIVEL (GPIO33)"
+      }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "lblReuse",
+      "top": 316,
+      "left": 620,
+      "attrs": {
+        "text": "Pedido de REUSO (GPIO25)"
+      }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "lblSwitches",
+      "top": 370,
+      "left": 560,
+      "attrs": {
+        "text": "Chave para a DIREITA = ativa"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "rDrain",
+      "top": 420,
+      "left": 230,
+      "rotate": 90,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "rReuse",
+      "top": 420,
+      "left": 330,
+      "rotate": 90,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "rAlarm",
+      "top": 420,
+      "left": 430,
+      "rotate": 90,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "ledDrain",
+      "top": 480,
+      "left": 225,
+      "attrs": {
+        "color": "blue",
+        "label": "DRENAGEM"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "ledReuse",
+      "top": 480,
+      "left": 325,
+      "attrs": {
+        "color": "green",
+        "label": "REUSO"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "ledAlarm",
+      "top": 480,
+      "left": 425,
+      "attrs": {
+        "color": "red",
+        "label": "ALERTA"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "rPumpDrain",
+      "top": -40,
+      "left": 760,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "rPumpReuse",
+      "top": 40,
+      "left": 760,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "pumpDrain",
+      "top": -80,
+      "left": 860,
+      "attrs": {
+        "color": "white",
+        "lightColor": "cyan",
+        "label": "BOMBA DRENAGEM"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "pumpReuse",
+      "top": 0,
+      "left": 860,
+      "attrs": {
+        "color": "white",
+        "lightColor": "lime",
+        "label": "SAIDA REUSO"
+      }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "lblBB",
+      "top": 360,
+      "left": 180,
+      "attrs": {
+        "text": "Protoboard: trilha + = 3V3, trilha - = GND"
+      }
+    }
+  ],
+  "connections": [
+    [
+      "esp:TX0",
+      "$serialMonitor:RX",
+      "",
+      []
+    ],
+    [
+      "esp:RX0",
+      "$serialMonitor:TX",
+      "",
+      []
+    ],
+    [
+      "esp:3V3",
+      "bb1:tp.1",
+      "red",
+      []
+    ],
+    [
+      "esp:GND.2",
+      "bb1:tn.1",
+      "black",
+      []
+    ],
+    [
+      "ultrasonic:VCC",
+      "esp:VIN",
+      "red",
+      []
+    ],
+    [
+      "ultrasonic:GND",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "ultrasonic:TRIG",
+      "esp:D5",
+      "green",
+      []
+    ],
+    [
+      "ultrasonic:ECHO",
+      "esp:D18",
+      "yellow",
+      []
+    ],
+    [
+      "relayDrain:VCC",
+      "esp:VIN",
+      "red",
+      []
+    ],
+    [
+      "relayDrain:GND",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "relayDrain:IN",
+      "esp:D26",
+      "orange",
+      []
+    ],
+    [
+      "relayDrain:COM",
+      "bb1:tp.3",
+      "red",
+      []
+    ],
+    [
+      "relayDrain:NO",
+      "rPumpDrain:1",
+      "orange",
+      []
+    ],
+    [
+      "rPumpDrain:2",
+      "pumpDrain:A",
+      "orange",
+      []
+    ],
+    [
+      "pumpDrain:C",
+      "bb1:tn.4",
+      "black",
+      []
+    ],
+    [
+      "relayReuse:VCC",
+      "esp:VIN",
+      "red",
+      []
+    ],
+    [
+      "relayReuse:GND",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "relayReuse:IN",
+      "esp:D27",
+      "orange",
+      []
+    ],
+    [
+      "relayReuse:COM",
+      "bb1:tp.5",
+      "red",
+      []
+    ],
+    [
+      "relayReuse:NO",
+      "rPumpReuse:1",
+      "orange",
+      []
+    ],
+    [
+      "rPumpReuse:2",
+      "pumpReuse:A",
+      "orange",
+      []
+    ],
+    [
+      "pumpReuse:C",
+      "bb1:tn.6",
+      "black",
+      []
+    ],
+    [
+      "swTankFull:2",
+      "esp:D32",
+      "violet",
+      []
+    ],
+    [
+      "swTankFull:3",
+      "bb1:tn.7",
+      "black",
+      []
+    ],
+    [
+      "swTankWater:2",
+      "esp:D33",
+      "violet",
+      []
+    ],
+    [
+      "swTankWater:3",
+      "bb1:tn.8",
+      "black",
+      []
+    ],
+    [
+      "swReuse:2",
+      "esp:D25",
+      "violet",
+      []
+    ],
+    [
+      "swReuse:3",
+      "bb1:tn.9",
+      "black",
+      []
+    ],
+    [
+      "esp:D14",
+      "rDrain:1",
+      "blue",
+      []
+    ],
+    [
+      "rDrain:2",
+      "ledDrain:A",
+      "blue",
+      []
+    ],
+    [
+      "ledDrain:C",
+      "bb1:tn.10",
+      "black",
+      []
+    ],
+    [
+      "esp:D13",
+      "rReuse:1",
+      "green",
+      []
+    ],
+    [
+      "rReuse:2",
+      "ledReuse:A",
+      "green",
+      []
+    ],
+    [
+      "ledReuse:C",
+      "bb1:tn.11",
+      "black",
+      []
+    ],
+    [
+      "esp:D21",
+      "rAlarm:1",
+      "red",
+      []
+    ],
+    [
+      "rAlarm:2",
+      "ledAlarm:A",
+      "red",
+      []
+    ],
+    [
+      "ledAlarm:C",
+      "bb1:tn.12",
+      "black",
+      []
+    ]
+  ],
+  "dependencies": {}
+}

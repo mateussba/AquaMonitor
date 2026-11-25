@@ -126,3 +126,32 @@ A Visão geral agora permite conectar o ESP32 diretamente. O modo interno `wokwi
 O sino oferece **Ativar notificações**: pede permissão por clique e guarda somente a preferência local. Novos eventos confirmados do ESP32 são enviados ao sistema do navegador; histórico antigo e eventos da simulação local não são reenviados. Falhas de entrega pelo sistema preservam os avisos no Dashboard. Funciona enquanto o Dashboard permanece aberto em localhost ou HTTPS; não implementa push com o aplicativo fechado.
 
 Referências: https://docs.espressif.com/projects/arduino-esp32/en/latest/api/wifi.html e https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API/Using_the_Notifications_API.
+
+## Simulação Wokwi e broker de testes próprio (25/11/2026)
+
+Branch `simulacao-wokwi`. O broker original continua sendo o padrão; tudo abaixo é opcional e só vale quando configurado localmente.
+
+**Configuração (nada disso é versionado):**
+
+| Parte | Arquivo local | Chave |
+| --- | --- | --- |
+| Firmware (Wokwi/placa) | `config.h` | `MQTT_USERNAME`, `MQTT_PASSWORD`, `#define MQTT_BROKER_HOST "<id>.ala.<região>.emqxsl.com"`, opcional `MQTT_BROKER_PORT`, `MQTT_TOPIC_BASE` |
+| Dashboard | `.env.local` | `VITE_MQTT_URL=wss://<id>.ala.<região>.emqxsl.com:8084/mqtt`, opcional `VITE_MQTT_TOPIC_BASE` |
+| Maquetes | `.env.local` da pasta | as mesmas `VITE_MQTT_URL` / `VITE_MQTT_TOPIC_BASE` |
+
+`VITE_MQTT_URL` só aceita `wss://` sem usuário, senha, query ou fragmento; qualquer outro valor volta ao broker original. Credenciais continuam digitadas na tela. O CA DigiCert Global Root G2 do firmware vale para os endereços `*.emqxsl.com` do EMQX Cloud Serverless (handshake verificado nas portas 8883 e 8084 do broker de testes).
+
+**Broker de testes (EMQX Cloud Serverless, cota gratuita, spend limit US$ 0):** um usuário MQTT com duas regras de autorização: Allow Publish & Subscribe em `aquamonitor/demo-29out-b741d2/#` e Deny Publish & Subscribe em `#`. O console do Serverless usa blacklist por padrão; a regra Deny restringe o usuário aos tópicos do projeto.
+
+**Circuito Wokwi:** `firmware-wokwi/diagram.json` (ESP32 DevKit v1, HC-SR04, 2 relés `pnp`/ativos em LOW, 3 chaves, protoboard, LEDs indicadores e LEDs “BOMBA DRENAGEM”/“SAIDA REUSO” no contato NO dos relés) e `libraries.txt` (PubSubClient, ArduinoJson). O padrão `npn` do Wokwi é ativo em HIGH e deixava a bomba ligada com `drain_on=false`; corrigido no diagrama, sem alterar o firmware.
+
+**Validação ponta a ponta realizada (Wokwi ↔ EMQX Cloud ↔ dashboard local):**
+
+- ESP32 virtual: Wi-Fi Wokwi-GUEST, NTP, TLS 8883 e autenticação: `[MQTT] Conectado; envio da inscricao em comandos: OK`.
+- Dashboard (WSS 8084): broker conectado, `ESP32: online`, telemetria de `aquamonitor-wokwi` com `seq`/`uptime_ms` iguais aos do monitor serial.
+- Comandos: entradas virtuais 22 cm → `input_mode=virtual` e drenagem ligada; 16 cm mantém (histerese); 12 cm desliga; `tank_empty=false` + `reuse_requested=true` → `reuse_on=true`; volta ao sensor → `[MQTT] Retornando ao HC-SR04` e `input_mode=sensor`.
+- Tempo real: HC-SR04 do Wokwi a 8 cm → dashboard 21,9 cm e drenagem ligada.
+- Perda e recuperação: simulação parada → aviso de atraso (6 s), dados desatualizados (15 s) e `offline` pelo testamento MQTT; simulação reiniciada → `online` e nova sequência. Com a aba do Wokwi em segundo plano o navegador desacelera a simulação, o keep-alive de 15 s expira e o firmware reconecta sozinho; mantenha a aba do Wokwi visível durante demonstrações.
+- Evidência: `docs/evidencias/dashboard-wokwi-broker-teste.jpg`.
+
+Não validado aqui: protótipo físico, reconexão do dashboard após queda da internet do navegador (coberta pelos testes automatizados com broker local) e a maquete standalone conectada ao broker de testes.
